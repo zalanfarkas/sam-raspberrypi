@@ -17,6 +17,8 @@ import MFRC522
 import signal
 from recieve import Recieve
 from parser import Parser
+#import time
+#import Adafruit_CharLCD as LCD
 
 
 continue_reading = True
