@@ -1,14 +1,3 @@
-#-------------------------------------------------------------------------------
-# Name:        Read
-# Purpose:
-#
-# Author:      Osnovnoy
-#
-# Created:     28/01/2018
-# Copyright:   (c) Osnovnoy 2018
-# Licence:     <your licence>
-#-------------------------------------------------------------------------------
-
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
@@ -17,9 +6,7 @@ import MFRC522
 import signal
 from recieve import Recieve
 from parser import Parser
-#import time
-#import Adafruit_CharLCD as LCD
-
+#import pin_setup (gives error)
 
 continue_reading = True
 
@@ -41,6 +28,9 @@ MIFAREReader = MFRC522.MFRC522()
 print "Welcome to attendance monitoring system"
 print "Press Ctrl-C to stop."
 
+# Pin setup (gives error)
+# lcd = pin_setup.Pin_setup()
+
 # This loop keeps checking for chips. If one is near it will get the UID and authenticate
 while continue_reading:
 
@@ -60,7 +50,7 @@ while continue_reading:
         # Create get request
         nfcData = str(uid[0]) + str(uid[1]) + str(uid[2])
 
-        #Parsing the uid on HTTP as a string
+        # Parsing the uid on HTTP as a string
         parser=Parser(nfcData)
         parser.parse()
 
