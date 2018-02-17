@@ -11,27 +11,47 @@
 import requests
 
 class Parser:
+    practical_initialized = False
 
     def __init__(self,uid):
         self.uid = uid
 
     def parse(self):
-        #parse the file on the post
-
-        # defining the api-endpoint
-        API_ENDPOINT = "http://aberdeen-sam.herokuapp.com/"
-        # your API key here
-        API_KEY = "XXXXXXXXXXXXXXXXX"
-
-        # data to be sent to api        
-        data={'uid':str(self.uid), 'type':'nfc', 'data':'id'}
-        
-        # sending post request and saving response as response object
-        r = requests.post(url = API_ENDPOINT, data = data)
-
-        # extracting response text
-        pastebin_url = r.text
-        print("The pastebin URL is:%s"%pastebin_url)
+	if practical_initialised == False:
+		#parse the file on the post
+	
+	        # defining the api-endpoint
+	        API_ENDPOINT = "http://abdn-sam.herokuapp.com/get_course"
+	        # your API key here
+	        API_KEY = "XXXXXXXXXXXXXXXXX"
+	
+	        # data to be sent to api        
+	        data={'uid':str(self.uid), 'type':'nfc', 'data':'id'}
+	        
+	        # sending post request and saving response as response object
+	        r = requests.post(url = API_ENDPOINT, data = data)
+	
+	        # extracting response text
+	        pastebin_url = r.text
+	        print("The pastebin URL is:%s" % pastebin_url)
+	        
+	else:
+		#parse the file on the post
+	
+	        # defining the api-endpoint
+	        API_ENDPOINT = "http://abdn-sam.herokuapp.com/record_attendance"
+	        # your API key here
+	        API_KEY = "XXXXXXXXXXXXXXXXX"
+	
+	        # data to be sent to api        
+	        data={'uid':str(self.uid), 'type':'nfc', 'data':'id', 'course_id' : ''}
+	        
+	        # sending post request and saving response as response object
+	        r = requests.post(url = API_ENDPOINT, data = data)
+	
+	        # extracting response text
+	        pastebin_url = r.text
+	        print("The pastebin URL is:%s"%pastebin_url)
 
 '''
     def validate(self,uid):

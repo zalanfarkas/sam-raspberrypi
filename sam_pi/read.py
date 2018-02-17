@@ -4,12 +4,10 @@
 import RPi.GPIO as GPIO
 import MFRC522
 import signal
-from recieve import Recieve
-from parser import Parser
-#import pin_setup (gives error)
+#from recieve import Recieve
+#from parser import Parser
 
 continue_reading = True
-
 
 # Capture SIGINT for cleanup when the script is aborted
 def end_read(signal,frame):
@@ -28,9 +26,6 @@ MIFAREReader = MFRC522.MFRC522()
 print "Welcome to attendance monitoring system"
 print "Press Ctrl-C to stop."
 
-# Pin setup (gives error)
-# lcd = pin_setup.Pin_setup()
-
 # This loop keeps checking for chips. If one is near it will get the UID and authenticate
 while continue_reading:
 
@@ -48,36 +43,8 @@ while continue_reading:
     if status == MIFAREReader.MI_OK:
 
         # Create get request
-        nfcData = str(uid[0]) + str(uid[1]) + str(uid[2])
+        nfcData = str(uid[0]) + str(uid[1]) + str(uid[2]) + str(uid[3]) + str(uid[4])
 
         # Parsing the uid on HTTP as a string
-        parser=Parser(nfcData)
-        parser.parse()
-
-        # If request was succesfull display all the data
-        # if not print out the error string generated
-        # completed full interface message
-        '''if(data["success"] == 1):
-            print "Card read UID: "+str(uid[0])+","+str(uid[1])+","+str(uid[2])+","+str(uid[3])
-            print "Student identified: " + data["student_name"]
-            print "Practical:" + data["course_title"]
-            print "Attendance recorded successfully"
-            print""
-        elif(data["error"] == 1):
-            print"FAILED TO RECOGNIZE"
-        #break'''
-    
-
-	'''key = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
-        # Select the scanned tag
-        MIFAREReader.MFRC522_SelectTag(uid)
-
-        # Authenticate
-        status = MIFAREReader.MFRC522_Auth(MIFAREReader.PICC_AUTHENT1A, 8, key, uid)
-
-        # Check if authenticated
-        if status == MIFAREReader.MI_OK:
-            MIFAREReader.MFRC522_Read(8)
-            MIFAREReader.MFRC522_StopCrypto1()
-        else:
-            print "Authentication error"'''
+        # parser=Parser(nfcData)
+        # parser.parse()

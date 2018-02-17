@@ -19,5 +19,5 @@ class Recieve:
 
     def __init__(self,uid):
         content = uid
-        response = requests.get('http://aberdeen-sam.herokuapp.com/')
+        response = requests.get('http://abdn-sam.herokuapp.com/')
         data = json.load(response.content)

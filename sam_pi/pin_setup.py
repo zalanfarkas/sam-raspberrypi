@@ -1,9 +1,8 @@
 #!/usr/bin/python
 
 import time
-
-
 import Adafruit_CharLCD as LCD
+
 '''
 # Raspberry Pi pin setup
 lcd_rs = 22
