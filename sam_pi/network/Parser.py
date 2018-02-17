@@ -1,7 +1,7 @@
 import requests
 
-from CourseJSON import CourseJSON
-from RecordAttendanceJSON import RecordAttendanceJSON
+from JSON.CourseJSON import CourseJSON
+from JSON.RecordAttendanceJSON import RecordAttendanceJSON
 from API_URLS import API_URLS
 
 class Parser:
@@ -40,15 +40,3 @@ class Parser:
 			error = jsonResponse['error']
 			return RecordAttendanceJSON(None, error)
 
-
-
-parser = Parser("nfc", "u00000002")
-
-
-jsonResp = parser.get_course()
-print(jsonResp.error)
-print(jsonResp.course_id)
-print(jsonResp.end_time)
-
-record_attendance_response = parser.record_attendance("nfc", "u00000002")
-print(record_attendance_response.student_id)

@@ -2,10 +2,10 @@
 # -*- coding: utf8 -*-
 
 import MFRC522
+from network.Parser import Parser
 
 def readNFC():
     reading = True
-
     # Create an object of the class MFRC522
     MIFAREReader = MFRC522.MFRC522()
 
@@ -27,13 +27,23 @@ def readNFC():
 
             # UID saved as nfcData
             nfcData = str(uid[0]) + str(uid[1]) + str(uid[2]) + str(uid[3]) + str(uid[4])
+            parser = Parser("nfc", nfcData)
+            course_information = parser.get_course()
 
+            
+            if course_information.error == None:
+                print("Current course id" + course_information.course_id + " it ends at " + course_information.end_time)
+            else:
+                print(course_information.error)
+                
             MIFAREReader.AntennaOff()
             reading = False
 
             return nfcData
         
 '''
+
+
     while reading:
         MIFAREReader = MFRC522.MFRC522()
 

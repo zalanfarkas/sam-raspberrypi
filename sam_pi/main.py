@@ -2,13 +2,13 @@
 
 import nfcread
 import RPi.GPIO as GPIO
-import display
+#import display
 
-display.init()
+#display.init()
 
 # Welcome message
-display.lcdWriteFirstLine("Welcome")
-display.lcdWriteSecondLine("Swipe your card")
+#display.lcdWriteFirstLine("Welcome")
+#display.lcdWriteSecondLine("Swipe your card")
 
 print nfcread.readNFC()
 
