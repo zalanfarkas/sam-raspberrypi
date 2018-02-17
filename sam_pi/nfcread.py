@@ -12,7 +12,6 @@ def readNFC():
 
     # This loop keeps checking for chips. If one is near it will get the UID
     while reading:
-
         # Scan for cards
         (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
 
@@ -32,7 +31,7 @@ def readNFC():
             if parser.course_id == None:
                 course_information = parser.get_course("nfc", nfc_data)
                 if course_information.error == None:
-                    print("Current course id" + course_information.course_id + " it ends at " + course_information.end_time + "\n")
+                    print("Current course id " + course_information.course_id + " it ends at " + course_information.end_time + "\n")
                     # Todo add timeout on end time i.e change course id to none after certain time
                 else:
                     print(course_information.error + "\n")
@@ -43,10 +42,6 @@ def readNFC():
                 else:
                     print("Attendance wasn't recorded succesfully here is the error: " + attendance_information.error + "\n")
                 
-            MIFAREReader.AntennaOff()
-            reading = False
-
-            return nfcData
             
     
         

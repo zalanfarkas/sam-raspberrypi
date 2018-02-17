@@ -2,7 +2,7 @@
 
 import nfcread
 import RPi.GPIO as GPIO
-#import display
+import display
 
 #display.init()
 

@@ -6,7 +6,7 @@ import time
 
 # Define GPIO to LCD mapping
 LCD_RS = 22 # Register select (select command mode - 0, or data mode - 1)
-LCD_E  = 17 # Enabled
+LCD_EN = 17 # Enabled
 # Only 4 bit operations will be used, so only 4 highest data pins will be used
 LCD_D4 = 23
 LCD_D5 = 24
@@ -27,7 +27,7 @@ E_DELAY = 0.00005
 
 def init():
   GPIO.setmode(GPIO.BOARD)     # Use BCM BOARD numbers
-  GPIO.setup(LCD_E, GPIO.OUT)  # E
+  GPIO.setup(LCD_EN, GPIO.OUT) # EN
   GPIO.setup(LCD_RS, GPIO.OUT) # RS
   GPIO.setup(LCD_D4, GPIO.OUT) # DB4
   GPIO.setup(LCD_D5, GPIO.OUT) # DB5
