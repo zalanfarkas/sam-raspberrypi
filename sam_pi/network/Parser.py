@@ -5,17 +5,14 @@ from JSON.RecordAttendanceJSON import RecordAttendanceJSON
 from API_URLS import API_URLS
 
 class Parser:
-	input_type = None
-	data = None
 	course_id = None
+	# Todo maybe add end_time?
 	
-	def __init__(self, input_type = None, data = None, course_id = None):
-		self.input_type = input_type  
-		self.data = data
+	def __init__(self, course_id = None):
 		self.course_id = course_id
-	
-	def get_course(self):
-		request = requests.post(API_URLS.GET_COURSE_ID, data = {'type': self.input_type, 'data': self.data})
+
+	def get_course(self, input_type, data):
+		request = requests.post(API_URLS.GET_COURSE_ID, data = {'type': input_type, 'data': data})
 		
 		# Todo: add try catch clause and check for request.status_code to make sure
 		# that request is valid
@@ -39,4 +36,3 @@ class Parser:
 		else:
 			error = jsonResponse['error']
 			return RecordAttendanceJSON(None, error)
-

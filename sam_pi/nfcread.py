@@ -6,6 +6,7 @@ from network.Parser import Parser
 
 def readNFC():
     reading = True
+    parser = Parser()
     # Create an object of the class MFRC522
     MIFAREReader = MFRC522.MFRC522()
 
@@ -26,20 +27,28 @@ def readNFC():
         if status == MIFAREReader.MI_OK:
 
             # UID saved as nfcData
-            nfcData = str(uid[0]) + str(uid[1]) + str(uid[2]) + str(uid[3]) + str(uid[4])
-            parser = Parser("nfc", nfcData)
-            course_information = parser.get_course()
-
+            nfc_data = str(uid[0]) + str(uid[1]) + str(uid[2]) + str(uid[3]) + str(uid[4])
             
-            if course_information.error == None:
-                print("Current course id" + course_information.course_id + " it ends at " + course_information.end_time)
+            if parser.course_id == None:
+                course_information = parser.get_course("nfc", nfc_data)
+                if course_information.error == None:
+                    print("Current course id" + course_information.course_id + " it ends at " + course_information.end_time + "\n")
+                    # Todo add timeout on end time i.e change course id to none after certain time
+                else:
+                    print(course_information.error + "\n")
             else:
-                print(course_information.error)
+                attendance_information = parser.record_attendance("nfc", nfc_data)
+                if attendance_information.error == None:
+                    print("Attendance recorded successfully for student with id: " + attendance_information.student_id + "\n")
+                else:
+                    print("Attendance wasn't recorded succesfully here is the error: " + attendance_information.error + "\n")
                 
             MIFAREReader.AntennaOff()
             reading = False
 
             return nfcData
+            
+    
         
 '''
 
