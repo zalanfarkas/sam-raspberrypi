@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
-
+import time
 import MFRC522
 from network.Parser import Parser
 
 def readNFC():
     reading = True
+    end_time = None
     parser = Parser()
     # Create an object of the class MFRC522
     MIFAREReader = MFRC522.MFRC522()
@@ -22,6 +23,11 @@ def readNFC():
         # Get the UID of the card
         (status,uid) = MIFAREReader.MFRC522_Anticoll()
 
+
+        if end_time != None and end_time < time.localtime():
+            parser.course_id = None
+          
+        
         # If we have the UID, continue
         if status == MIFAREReader.MI_OK:
 
@@ -32,6 +38,7 @@ def readNFC():
                 course_information = parser.get_course("nfc", nfc_data)
                 if course_information.error == None:
                     print("Current course id " + course_information.course_id + " it ends at " + course_information.end_time + "\n")
+                    end_time = course_information.end_time
                     # Todo add timeout on end time i.e change course id to none after certain time
                 else:
                     print(course_information.error + "\n")
