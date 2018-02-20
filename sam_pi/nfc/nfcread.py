@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
+
 import time
 import MFRC522
 from network.Parser import Parser
+import display.LCD as LCD
 
 def readNFC():
     reading = True
@@ -37,7 +39,8 @@ def readNFC():
             if parser.course_id == None:
                 course_information = parser.get_course("nfc", nfc_data)
                 if course_information.error == None:
-                    print("Current course id " + course_information.course_id + " it ends at " + course_information.end_time + "\n")
+                    LCD.write("Current course id " + course_information.course_id)
+                    #print("Current course id " + course_information.course_id + " it ends at " + course_information.end_time + "\n")
                     end_time = course_information.end_time
                     # Todo add timeout on end time i.e change course id to none after certain time
                 else:
