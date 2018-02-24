@@ -2,6 +2,7 @@ import requests
 
 from JSON.CourseJSON import CourseJSON
 from JSON.RecordAttendanceJSON import RecordAttendanceJSON
+from JSON.PendingPracticalJSON import PendingPracticalJSON
 from API_URLS import API_URLS
 
 class Parser:
@@ -36,3 +37,20 @@ class Parser:
 		else:
 			error = jsonResponse['error']
 			return RecordAttendanceJSON(None, error)
+
+
+
+	def query_pending_practicals(self, raspberry_pi_id):
+		request = requests.post(API_URLS.RECORD_ATTENDANCE, data = {'data': raspberry_pi_id })
+		jsonResponse = request.json()
+		if jsonResponse['success'] == True:
+			pending = jsonResponse['pending']
+			if pending:
+				course_id = jsonResponse['course_id']
+				self.course_id = course_id
+				end_time = jsonResponse['end_time']
+				return PendingPracticalJSON(pending, course_id, end_time)
+			return PendingPracticalJSON(pending)
+		else:
+			error = jsonResponse['error']
+			return PendingPracticalJSON(False, None, None, error)
