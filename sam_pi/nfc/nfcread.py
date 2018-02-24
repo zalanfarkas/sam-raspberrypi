@@ -1,18 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
+import time
 import MFRC522
 from network.Parser import Parser
+import display.LCD as LCD
 
 def readNFC():
     reading = True
+    end_time = None
     parser = Parser()
     # Create an object of the class MFRC522
     MIFAREReader = MFRC522.MFRC522()
 
     # This loop keeps checking for chips. If one is near it will get the UID
     while reading:
-
         # Scan for cards
         (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
 
@@ -23,6 +25,11 @@ def readNFC():
         # Get the UID of the card
         (status,uid) = MIFAREReader.MFRC522_Anticoll()
 
+
+        if end_time != None and end_time < time.localtime():
+            parser.course_id = None
+          
+        
         # If we have the UID, continue
         if status == MIFAREReader.MI_OK:
 
@@ -32,7 +39,9 @@ def readNFC():
             if parser.course_id == None:
                 course_information = parser.get_course("nfc", nfc_data)
                 if course_information.error == None:
-                    print("Current course id" + course_information.course_id + " it ends at " + course_information.end_time + "\n")
+                    LCD.write("Current course id " + course_information.course_id)
+                    #print("Current course id " + course_information.course_id + " it ends at " + course_information.end_time + "\n")
+                    end_time = course_information.end_time
                     # Todo add timeout on end time i.e change course id to none after certain time
                 else:
                     print(course_information.error + "\n")
@@ -43,10 +52,6 @@ def readNFC():
                 else:
                     print("Attendance wasn't recorded succesfully here is the error: " + attendance_information.error + "\n")
                 
-            MIFAREReader.AntennaOff()
-            reading = False
-
-            return nfcData
             
     
         
