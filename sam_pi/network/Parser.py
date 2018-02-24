@@ -41,7 +41,7 @@ class Parser:
 
 
 	def query_pending_practicals(self, raspberry_pi_id):
-		request = requests.post(API_URLS.RECORD_ATTENDANCE, data = {'data': raspberry_pi_id })
+		request = requests.post(API_URLS.QUERY_PENDING_PRACTICALS, data = {'data': raspberry_pi_id })
 		jsonResponse = request.json()
 		if jsonResponse['success'] == True:
 			pending = jsonResponse['pending']

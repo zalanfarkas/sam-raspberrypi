@@ -125,7 +125,7 @@ def displaymessage(message):
                 write(message)
                 time.sleep(0.2)
                 for i in range(0, len(message) - 16):
-                        time.sleep(0.3)
+                        time.sleep(0.1)
                         shiftleft()
         else:
                 time.sleep(0.2)
