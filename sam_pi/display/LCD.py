@@ -5,9 +5,9 @@ _displayfunction = 0
 _displaycontrol = 0
 _row_offsets = [None]*4
 
-LCD_RS = 15
-LCD_EN = 11
-LCD_DATA = [16,18,7,12]
+LCD_RS = 3
+LCD_EN = 5
+LCD_DATA = [7,11,13,15]
 
 LCD_COLS = 16
 LCD_ROWS = 2
@@ -118,3 +118,17 @@ def write4bits(value):
 		GPIO.output(LCD_DATA[i], (value >> i) & 0x01)
 			
 	pulseEnable()
+
+def displaymessage(message):
+        clear()
+        if len(message) > 16:
+                write(message)
+                time.sleep(0.2)
+                for i in range(0, len(message) - 16):
+                        time.sleep(0.3)
+                        shiftleft()
+        else:
+                time.sleep(0.2)
+                write(message)
+        time.sleep(1)
+

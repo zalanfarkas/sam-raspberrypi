@@ -7,6 +7,9 @@ from network.Parser import Parser
 import display.LCD as LCD
 
 def readNFC():
+    LCD.displaymessage("Welcome")
+    LCD.displaymessage("Swipe your card to start the practical")
+ 
     reading = True
     end_time = None
     parser = Parser()
@@ -20,8 +23,8 @@ def readNFC():
 
         # If a card is found
         if status == MIFAREReader.MI_OK:
-            print "Card detected"
-
+            LCD.displaymessage("Card detected")
+            
         # Get the UID of the card
         (status,uid) = MIFAREReader.MFRC522_Anticoll()
 
@@ -39,34 +42,19 @@ def readNFC():
             if parser.course_id == None:
                 course_information = parser.get_course("nfc", nfc_data)
                 if course_information.error == None:
-                    LCD.write("Current course id " + course_information.course_id)
+                    LCD.displaymessage("Current course id " + course_information.course_id + " it ends at " + course_information.end_time + "\n")
                     #print("Current course id " + course_information.course_id + " it ends at " + course_information.end_time + "\n")
                     end_time = course_information.end_time
                     # Todo add timeout on end time i.e change course id to none after certain time
                 else:
-                    print(course_information.error + "\n")
+                    LCD.displaymessage(course_information.error + "\n")
+                    #print(course_information.error + "\n")
             else:
                 attendance_information = parser.record_attendance("nfc", nfc_data)
                 if attendance_information.error == None:
-                    print("Attendance recorded successfully for student with id: " + attendance_information.student_id + "\n")
+                    LCD.displaymessage("Attendance recorded successfully for student with id: " + attendance_information.student_id + "\n")
+                    #print("Attendance recorded successfully for student with id: " + attendance_information.student_id + "\n")
                 else:
-                    print("Attendance wasn't recorded succesfully here is the error: " + attendance_information.error + "\n")
+                    LCD.displaymessage("Attendance wasn't recorded succesfully here is the error: " + attendance_information.error + "\n")
+                    #print("Attendance wasn't recorded succesfully here is the error: " + attendance_information.error + "\n")
                 
-            
-    
-        
-'''
-
-
-    while reading:
-        MIFAREReader = MFRC522.MFRC522()
-
-        (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
-
-        (status,backData) = MIFAREReader.MFRC522_Anticoll()
-        if status == MIFAREReader.MI_OK:
-            print("Card detected")
-            MIFAREReader.AntennaOff()
-            reading=False
-            return str(backData[0])+str(backData[1])+str(backData[2])+str(backData[3])+str(backData[4])
-'''
