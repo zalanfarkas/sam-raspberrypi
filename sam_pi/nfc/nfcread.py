@@ -40,10 +40,7 @@ def readNFC():
         # Scan for cards
         (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
 
-        # If a card is found
-        if status == MIFAREReader.MI_OK:
-            LCD.displaymessage("Card detected")
-            
+
         # Get the UID of the card
         (status,uid) = MIFAREReader.MFRC522_Anticoll()
 
@@ -54,7 +51,8 @@ def readNFC():
         
         # If we have the UID, continue
         if status == MIFAREReader.MI_OK:
-
+            LCD.displaymessage("Card detected")
+            
             # UID saved as nfcData
             nfc_data = str(uid[0]) + str(uid[1]) + str(uid[2]) + str(uid[3]) + str(uid[4])
             
