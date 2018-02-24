@@ -6,13 +6,32 @@ import MFRC522
 from network.Parser import Parser
 import display.LCD as LCD
 
+# Just for test purpose later change to better solution
+pi_id = 1
+
+
+reading = True
+end_time = None
+parser = Parser()
+
+def pollPendingPracticals():
+    pending_practical = parser.query_pending_practicals()
+    if pending_practical.error != None:
+        print("There was an error:" + pending_practical.error)
+    elif pending_practical.pending:
+        print("Practical for course: " + pending_practical.course_id + " started")
+    
+
 def readNFC():
+<<<<<<< HEAD
     LCD.displaymessage("Welcome")
     LCD.displaymessage("Swipe your card to start the practical")
  
     reading = True
     end_time = None
     parser = Parser()
+=======
+>>>>>>> 3a0a74588b7b43cea3a0fb75b7126350066f0b8e
     # Create an object of the class MFRC522
     MIFAREReader = MFRC522.MFRC522()
 
