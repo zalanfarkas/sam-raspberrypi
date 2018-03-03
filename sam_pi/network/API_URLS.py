@@ -3,3 +3,4 @@ class API_URLS:
     GET_COURSE_ID = BASE + "get_course"
     RECORD_ATTENDANCE = BASE + "record_attendance"
     QUERY_PENDING_PRACTICALS = BASE + "pending_practicals"
+    UPLOAD_FINGERPRINT = BASE + "upload_fingerprint"

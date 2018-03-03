@@ -3,6 +3,7 @@ import requests
 from JSON.CourseJSON import CourseJSON
 from JSON.RecordAttendanceJSON import RecordAttendanceJSON
 from JSON.PendingPracticalJSON import PendingPracticalJSON
+from JSON.UploadFingerprintJSON import UploadFingerprintJSON
 from API_URLS import API_URLS
 
 class Parser:
@@ -39,8 +40,6 @@ class Parser:
 			error = jsonResponse['error']
 			return RecordAttendanceJSON(None, error)
 
-
-
 	def query_pending_practicals(self, raspberry_pi_id):
 		request = requests.post(API_URLS.QUERY_PENDING_PRACTICALS, data = {'data': raspberry_pi_id })
 		jsonResponse = request.json()
@@ -55,6 +54,12 @@ class Parser:
 		else:
 			error = jsonResponse['error']
 			return PendingPracticalJSON(False, None, None, error)
-
-                
-                
+	
+	def upload_fingerprint(self, card_id, fingerprint):
+		request = requests.post(API_URLS.UPLOAD_FINGERPRINT, data = {'card_id': card_id, 'fingerprint': fingerprint})
+		jsonResponse = request.json()
+		if jsonResponse['success'] == True:
+			return UploadFingerprintJSON(True)
+		else:
+			error = jsonResponse['error']
+			return UploadFingerprintJSON(False, error)
