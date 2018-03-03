@@ -8,7 +8,7 @@ import thread
 import led.LED as LED
 
 LCD.init()
-LED.init()
+led = LED.LED()
 
 try:
    thread.start_new_thread(nfcread.pollPendingPracticals, ())

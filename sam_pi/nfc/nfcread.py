@@ -13,6 +13,8 @@ pi_id = 1
 reading = True
 end_time = None
 parser = Parser()
+LED = LED.LED()
+
 
 def pollPendingPracticals():
     while 1:
@@ -53,7 +55,7 @@ def readNFC():
         # If we have the UID, continue
         if status == MIFAREReader.MI_OK:
             LCD.displaymessage("Card detected")
-            
+            #LED.greenon()
             # UID saved as nfcData
             nfc_data = str(uid[0]) + str(uid[1]) + str(uid[2]) + str(uid[3]) + str(uid[4])
             

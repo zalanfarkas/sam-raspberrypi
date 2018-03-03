@@ -1,3 +1,4 @@
+import time
 from network.Parser import Parser
 from fingerprint.Fingerprint import Fingerprint
 parser = Parser()
@@ -27,5 +28,5 @@ while True:
             print("Attendance recorded successfully for student with id " + response.student_id)
         else:
             print("Error: " + response.error)
-        time.slee(1)
+        time.sleep(1)
 

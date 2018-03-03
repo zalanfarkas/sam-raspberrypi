@@ -1,4 +1,4 @@
-import MFRC522
+import nfc.MFRC522 as MFRC522
 from network.Parser import Parser
 from fingerprint.Fingerprint import Fingerprint
 
@@ -7,8 +7,6 @@ parser = Parser()
 # Create an object of the class MFRC522
 MIFAREReader = MFRC522.MFRC522()
 finerprint_scanner = Fingerprint()
-
-in_progress = False
 
 print("Scan your card to identify yourself")
 while(True):
@@ -28,4 +26,5 @@ while(True):
             print("Template was successfully uploaded")
         else:
             print("Failed to upload template. Here is the error message: " + result.error)
+        print("Scan your card to identify yourself")
         

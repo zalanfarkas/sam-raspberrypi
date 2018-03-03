@@ -72,7 +72,7 @@ class Fingerprint:
         # Loads the found template to charbuffer 1
         self.fingerprint.loadTemplate(positionNumber, 0x01)
         # Downloads the characteristics of template loaded in charbuffer 1
-        template = str(f.downloadCharacteristics(0x01))
+        template = self.fingerprint.downloadCharacteristics(0x01)
         # Return template as joined string
         return '|'.join(map(str,template))
             
