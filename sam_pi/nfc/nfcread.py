@@ -5,6 +5,7 @@ import time
 import MFRC522
 from network.Parser import Parser
 import display.LCD as LCD
+import led.LED as LED
 
 # Just for test purpose later change to better solution
 pi_id = 1

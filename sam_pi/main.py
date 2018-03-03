@@ -5,8 +5,10 @@ import nfc.nfcread as nfcread
 import display.LCD as LCD
 import time
 import thread
+import led.LED as LED
 
 LCD.init()
+LED.init()
 
 try:
    thread.start_new_thread(nfcread.pollPendingPracticals, ())
