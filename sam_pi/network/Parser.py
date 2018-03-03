@@ -23,10 +23,11 @@ class Parser:
 			course_id = jsonResponse['course_id']
 			self.course_id = course_id
 			end_time = jsonResponse['end_time']
-			return CourseJSON(course_id, end_time)
+			templates = jsonResponse['templates']
+			return CourseJSON(course_id, end_time, templates)
 		else:
 			error = jsonResponse['error']
-			return CourseJSON(None, None, error)
+			return CourseJSON(None, None, None, error)
 			
 	def record_attendance(self, input_type, data):
 		request = requests.post(API_URLS.RECORD_ATTENDANCE, data = {'type': input_type, 'data': data, 'course_id': self.course_id })
