@@ -10,7 +10,9 @@ normalized_templates = []
 for template in course_information.templates:
     normalized_templates.append(map(int, template.split("|")))
 
+print(normalized_templates)
 
 finerprint_scanner = Fingerprint()
 finerprint_scanner.load_templates(normalized_templates)
+finerprint_scanner.testas()
 
