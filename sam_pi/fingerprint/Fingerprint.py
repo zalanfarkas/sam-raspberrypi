@@ -17,7 +17,7 @@ class Fingerprint:
     
     def load_templates(self, templates):
         # Before loading templates remove old ones
-        self.clearDatabase()
+        self.fingerprint.clearDatabase()
 
         for template in templates:
             # Load template data to first buffer
