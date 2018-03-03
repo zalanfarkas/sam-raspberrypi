@@ -29,7 +29,8 @@ class Fingerprint:
             # to fingerprint
             self.fingerprint.storeTemplate()
         print("Finished loading templates current count is: "+ str(self.fingerprint.getTemplateCount()))
-
+    
+    # Generate template for user
     def get_template(self):
         # Wait for finger
         print('Waiting for finger...')
@@ -42,29 +43,39 @@ class Fingerprint:
         template = self.fingerprint.downloadCharacteristics(0x01)
         # Return template as joined string
         return '|'.join(map(str,template))
-
-    def testas(self):
+    
+    # Get characteristics
+    def get_characteristics(self):
         print('Waiting for finger...')
 
-        ## Wait that finger is read
-        while ( self.fingerprint.readImage() == False ):
+        # Wait that finger is read
+        while (self.fingerprint.readImage() == False):
             pass
 
-        ## Converts read image to characteristics and stores it in charbuffer 1
+        # Converts read image to characteristics and stores it in charbuffer 1
         self.fingerprint.convertImage(0x01)
 
-        ## Searchs template
+        # Searchs template
         result = self.fingerprint.searchTemplate()
 
         positionNumber = result[0]
         accuracyScore = result[1]
-
-        if ( positionNumber == -1 ):
-            print('No match found!')
-            exit(0)
+        
+        # No match is found
+        if (positionNumber == -1):
+            return None
         else:
             print('Found template at position #' + str(positionNumber))
             print('The accuracy score is: ' + str(accuracyScore))
+            print('Waiting for finger...')
+        
+        # Loads the found template to charbuffer 1
+        self.fingerprint.loadTemplate(positionNumber, 0x01)
+        # Downloads the characteristics of template loaded in charbuffer 1
+        template = str(f.downloadCharacteristics(0x01))
+        # Return template as joined string
+        return '|'.join(map(str,template))
+            
+        
 
-        
-        
+ 

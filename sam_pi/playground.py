@@ -10,9 +10,22 @@ normalized_templates = []
 for template in course_information.templates:
     normalized_templates.append(map(int, template.split("|")))
 
-print(normalized_templates)
 
 finerprint_scanner = Fingerprint()
 finerprint_scanner.load_templates(normalized_templates)
-finerprint_scanner.testas()
+
+
+while True:
+    characteristics = finerprint_scanner.get_characteristics()
+    
+    if characteristics == None:
+        print("Fingerprint not found")
+        time.sleep(1)
+    else:
+        response = parser.record_attendance("fingerprint", characteristics)
+        if response.error == None:
+            print("Attendance recorded successfully for student with id " + response.student_id)
+        else:
+            print("Error: " + response.error)
+        time.slee(1)
 
