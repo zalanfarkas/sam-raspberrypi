@@ -1,22 +1,28 @@
 #!/usr/bin/python
 
-import RPi.GPIO as GPIO
 import nfc.nfcread as nfcread
-import display.LCD as LCD
-import time
-import thread
+import RPi.GPIO as GPIO
+import lcd.LCD as LCD
 import led.LED as LED
+import thread
+import time
 
-LCD.init()
-led = LED.LED()
 
-try:
-   thread.start_new_thread(nfcread.pollPendingPracticals, ())
-   thread.start_new_thread(nfcread.readNFC, ())
-except:
-   print "Error: unable to start thread"
-   
-while 1:
-    pass
+def main():
+   LCD.init()
+   LED.init()
 
-GPIO.cleanup()
+   try:
+      thread.start_new_thread(nfcread.pollPendingPracticals, ())
+      thread.start_new_thread(nfcread.readNFC, ())
+   except:
+      print "Error: unable to start thread"
+      
+   while 1:
+       pass
+
+   GPIO.cleanup()
+
+
+if __name__ == '__main__':
+   main()

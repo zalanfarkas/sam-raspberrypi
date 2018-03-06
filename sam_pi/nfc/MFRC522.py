@@ -258,7 +258,6 @@ class MFRC522:
 
     self.MFRC522_Reset();
 
-
     self.Write_MFRC522(self.TModeReg, 0x8D)
     self.Write_MFRC522(self.TPrescalerReg, 0x3E)
     self.Write_MFRC522(self.TReloadRegL, 30)

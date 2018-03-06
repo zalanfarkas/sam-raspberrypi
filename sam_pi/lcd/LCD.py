@@ -1,3 +1,4 @@
+from threading import Thread
 import RPi.GPIO as GPIO
 import time
 
@@ -94,6 +95,7 @@ def command(value):
 	send(value, 0)
 
 def write(value):
+        clear()
 	char = list(value)
 	for i in range (0, len(char)):
 		send(ord(char[i]), 1)
@@ -119,16 +121,37 @@ def write4bits(value):
 			
 	pulseEnable()
 
+fuckoff = False
+messagecopy = ""
+def asyncWrite(message):
+        global messagecopy
+        if messagecopy == message:
+                return
+        else:
+                messagecopy = message
+                w = Thread(target=write, args=(message,))
+                w.start()
+
 def displaymessage(message):
         clear()
         if len(message) > 16:
                 write(message)
                 time.sleep(0.2)
                 for i in range(0, len(message) - 16):
-                        time.sleep(0.1)
+                        time.sleep(0.2)
                         shiftleft()
+
         else:
                 time.sleep(0.2)
                 write(message)
-        time.sleep(1)
+        time.sleep(0.1)
 
+fuckme = None
+
+def asyncDisplay(message):
+        global fuckme
+        if fuckme != None:
+                fuckme._Thread__delete()
+        fuckme = Thread(target=displaymessage, args=(message,))
+        fuckme.start()
+        
