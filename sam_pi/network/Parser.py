@@ -4,6 +4,7 @@ from JSON.CourseJSON import CourseJSON
 from JSON.RecordAttendanceJSON import RecordAttendanceJSON
 from JSON.PendingPracticalJSON import PendingPracticalJSON
 from JSON.UploadFingerprintJSON import UploadFingerprintJSON
+from JSON.CurrentTemplatesJSON import CurrentTemplatesJSON
 from API_URLS import API_URLS
 
 class Parser:
@@ -63,3 +64,12 @@ class Parser:
 		else:
 			error = jsonResponse['error']
 			return UploadFingerprintJSON(False, error)
+	
+	# Method to fetch currently running practicals fingeprint templates		
+	def current_templates(self):
+		request = requests.post(API_URLS.CURRENT_TEMPLATES, data = {})
+		jsonResponse = request.json()
+		success = jsonResponse['success']
+		templates = jsonResponse['templates']
+		return CurrentTemplatesJSON(success, templates)
+		
