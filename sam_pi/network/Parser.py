@@ -4,11 +4,12 @@ from JSON.CourseJSON import CourseJSON
 from JSON.RecordAttendanceJSON import RecordAttendanceJSON
 from JSON.PendingPracticalJSON import PendingPracticalJSON
 from JSON.UploadFingerprintJSON import UploadFingerprintJSON
+from JSON.CurrentTemplatesJSON import CurrentTemplatesJSON
 from API_URLS import API_URLS
 
 class Parser:
 	course_id = None
-	# Todo maybe add end_time?
+	end_time = None
 	
 	def __init__(self, course_id = None):
 		self.course_id = course_id
@@ -22,8 +23,9 @@ class Parser:
 		
 		if jsonResponse['success'] == True:
 			course_id = jsonResponse['course_id']
-			self.course_id = course_id
 			end_time = jsonResponse['end_time']
+			self.course_id = course_id
+			self.end_time = end_time
 			templates = jsonResponse['templates']
 			return CourseJSON(course_id, end_time, templates)
 		else:
@@ -47,8 +49,9 @@ class Parser:
 			pending = jsonResponse['pending']
 			if pending:
 				course_id = jsonResponse['course_id']
-				self.course_id = course_id
 				end_time = jsonResponse['end_time']
+				self.course_id = course_id
+				self.end_time = end_time
 				return PendingPracticalJSON(pending, course_id, end_time)
 			return PendingPracticalJSON(pending)
 		else:
@@ -63,3 +66,12 @@ class Parser:
 		else:
 			error = jsonResponse['error']
 			return UploadFingerprintJSON(False, error)
+	
+	# Method to fetch currently running practicals fingeprint templates		
+	def current_templates(self):
+		request = requests.post(API_URLS.CURRENT_TEMPLATES, data = {})
+		jsonResponse = request.json()
+		success = jsonResponse['success']
+		templates = jsonResponse['templates']
+		return CurrentTemplatesJSON(success, templates)
+		

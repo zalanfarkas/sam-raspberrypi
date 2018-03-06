@@ -4,3 +4,4 @@ class API_URLS:
     RECORD_ATTENDANCE = BASE + "record_attendance"
     QUERY_PENDING_PRACTICALS = BASE + "pending_practicals"
     UPLOAD_FINGERPRINT = BASE + "upload_fingerprint"
+    CURRENT_TEMPLATES = BASE + "current_templates"

@@ -1,8 +1,11 @@
 from pyfingerprint.pyfingerprint import PyFingerprint
+import lcd.LCD as LCD
+import led.LED as LED
 
 class Fingerprint:
 
     fingerprint = None
+    parser = None
     
     def __init__(self):
         try:
@@ -14,13 +17,27 @@ class Fingerprint:
             print('Exception message: ' + str(e))
             exit(1)
             
+    def start(self, parser):
+        parser = parser
+        while True:
+            characteristics = self.get_characteristics()
+            if characteristics == None:
+                LED.asyncRed()
+                LCD.asyncDisplay("Fingerprint not found")
+            else:
+                response = self.parser.record_attendance("fingerprint", characteristics)
+                if response.error == None:
+                    LED.asyncGreen()
+                    LCD.asyncDisplay("Attendance recorded successfully for student with id " + response.student_id)
+                else:
+                    LED.asyncRed()
+                    LCD.asyncDisplay("Error: " + response.error)
     
     def load_templates(self, templates):
         print("Preparing to load templates, current count is: " + str(self.fingerprint.getTemplateCount()))
         # Before loading templates remove old ones
         self.fingerprint.clearDatabase()
         print("Deleted old templates, current count is: " + str(self.fingerprint.getTemplateCount()))
-        
 
         for template in templates:
             # Load template data to first buffer
