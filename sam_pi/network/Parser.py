@@ -9,7 +9,7 @@ from API_URLS import API_URLS
 
 class Parser:
 	course_id = None
-	# Todo maybe add end_time?
+	end_time = None
 	
 	def __init__(self, course_id = None):
 		self.course_id = course_id
@@ -23,8 +23,9 @@ class Parser:
 		
 		if jsonResponse['success'] == True:
 			course_id = jsonResponse['course_id']
-			self.course_id = course_id
 			end_time = jsonResponse['end_time']
+			self.course_id = course_id
+			self.end_time = end_time
 			templates = jsonResponse['templates']
 			return CourseJSON(course_id, end_time, templates)
 		else:
@@ -48,8 +49,9 @@ class Parser:
 			pending = jsonResponse['pending']
 			if pending:
 				course_id = jsonResponse['course_id']
-				self.course_id = course_id
 				end_time = jsonResponse['end_time']
+				self.course_id = course_id
+				self.end_time = end_time
 				return PendingPracticalJSON(pending, course_id, end_time)
 			return PendingPracticalJSON(pending)
 		else:
