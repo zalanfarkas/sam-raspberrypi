@@ -18,9 +18,10 @@ class Fingerprint:
             exit(1)
             
     def start(self, parser):
-        parser = parser
+        self.parser = parser
         while True:
             characteristics = self.get_characteristics()
+            print(self.parser.course_id)
             if characteristics == None:
                 LED.asyncRed()
                 LCD.asyncWrite("Fingerprint not found")
@@ -79,6 +80,7 @@ class Fingerprint:
         # Wait that finger is read
         while (self.fingerprint.readImage() == False):
             pass
+        print("shit")
 
         # Converts read image to characteristics and stores it in charbuffer 1
         self.fingerprint.convertImage(0x01)

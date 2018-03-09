@@ -16,37 +16,20 @@ message3 = "CARD DETECTED"
 # Just for test purpose later change to better solution
 pi_id = 1
 
-reading = True
-end_time = None
-parser = Parser()
 
-def pollPendingPracticals():
-    while 1:
-        global parser, end_time, reading
-        print("polling")
-        if parser.course_id == None:
-            pending_practical = parser.query_pending_practicals(pi_id)
-            if pending_practical.error != None:
-                print("There was an error:" + pending_practical.error)
-            elif pending_practical.pending:
-                print("Practical for course: " + pending_practical.course_id + " started")
-        time.sleep(20)
-    
-
-def readNFC():
-    global parser, end_time, reading
+def readNFC(parser, fingerprint):
 
     # Create an object of the class MFRC522
     MIFAREReader = MFRC522()
 
     # This loop keeps checking for chips. If one is near it will get the UID
-    while reading:
+    while True:
 
         # Message for recording attandance
         if parser.course_id == None:
-            LCD.asyncWrite(message1)
+            LCD.asyncWrite(" SWIPE CARD TO                          START PRACTICAL")
         else:
-            LCD.asyncWrite(message2)
+            LCD.asyncWrite("RECORD THE                              ATTANDANCE...")
         
         # Scan for cards
         (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
@@ -54,7 +37,7 @@ def readNFC():
         # Get the UID of the card
         (status,uid) = MIFAREReader.MFRC522_Anticoll()
 
-        if end_time != None and end_time < time.localtime():
+        if parser.end_time != None and parser.end_time < time.localtime():
             parser.course_id = None
           
         # If we have the UID, continue
@@ -62,7 +45,7 @@ def readNFC():
             #in_progress = True
             
             #LED.asyncGreen()
-            LCD.asyncWrite(message3)
+            LCD.asyncWrite("CARD DETECTED")
            
             # UID saved as nfcData
             nfc_data = str(uid[0]) + str(uid[1]) + str(uid[2]) + str(uid[3]) + str(uid[4])
@@ -72,8 +55,10 @@ def readNFC():
                 if course_information.error == None:
                     LED.asyncGreen()
                     LCD.asyncWrite("COURSE ID " + course_information.course_id + "                        INITIALIZED")
+                    if courser_information.templates != None:
+                        fingerprint.load_templates(templates)
                     #print("Current course id " + course_information.course_id + " it ends at " + course_information.end_time + "\n")
-                    end_time = course_information.end_time
+                    #parser.end_time = course_information.end_time
                     # Todo add timeout on end time i.e change course id to none after certain time
 
                 else:
