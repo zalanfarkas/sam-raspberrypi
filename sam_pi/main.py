@@ -20,12 +20,11 @@ def main():
    try:
       #thread.start_new_thread(nfcread.pollPendingPracticals, (parser,))
       thread.start_new_thread(nfcread.readNFC, (parser,))
-      thread.start_new_thread(fingerprint.start, (parser, ))
    except:
       print "Error: unable to start thread"
       
-   while 1:
-       pass
+   while True:
+       fingerprint.start(parser)
 
    GPIO.cleanup()
 

@@ -1,11 +1,12 @@
 from pyfingerprint.pyfingerprint import PyFingerprint
 import lcd.LCD as LCD
 import led.LED as LED
+import time
 
 class Fingerprint:
 
     fingerprint = None
-    parser = None
+    loading_templates = False
     
     def __init__(self):
         try:
@@ -18,32 +19,32 @@ class Fingerprint:
             exit(1)
             
     def start(self, parser):
-        self.parser = parser
         while True:
-            characteristics = self.get_characteristics()
-            print(self.parser.course_id)
-            if characteristics == None:
-                LED.asyncRed()
-                LCD.asyncWrite("Fingerprint not found")
-            else:
-                # If course is not started try to start it
-                # otherwise try to record attendance
-                if parser.course_id != None:
-                    course_information = parser.get_course("nfc", characteristics)
-                    if course_information.error == None:
-                        LED.asyncGreen()
-                        LCD.asyncWrite("COURSE ID " + course_information.course_id + "                        INITIALIZED")
+            # Sleep thread, otherwise pi will get overloaded
+            time.sleep(1)
+            # Only try to scan fingers, when sensor is not busy
+            if self.loading_templates == False:
+                # Try to get finger characteristics
+                characteristics = self.get_characteristics()
+                if characteristics != None:
+                    # If course is not started try to start it
+                    # otherwise try to record attendance
+                    if parser.course_id != None:
+                        course_information = parser.get_course("nfc", characteristics)
+                        if course_information.error == None:
+                            LED.asyncGreen()
+                            LCD.asyncWrite("COURSE ID " + course_information.course_id + "                        INITIALIZED")
+                        else:
+                            LED.asyncRed()
+                            LCD.write(course_information.error)
                     else:
-                        LED.asyncRed()
-                        LCD.write(course_information.error)
-                else:
-                    response = self.parser.record_attendance("fingerprint", characteristics)
-                    if response.error == None:
-                        LED.asyncGreen()
-                        LCD.asyncWrite("Attendance recorded successfully for student with id " + response.student_id)
-                    else:
-                        LED.asyncRed()
-                        LCD.asyncWrite("Error: " + response.error)
+                        response = self.parser.record_attendance("fingerprint", characteristics)
+                        if response.error == None:
+                            LED.asyncGreen()
+                            LCD.asyncWrite("Attendance recorded successfully for student with id " + response.student_id)
+                        else:
+                            LED.asyncRed()
+                            LCD.asyncWrite("Error: " + response.error)
     
     def load_templates(self, templates):
         print("Preparing to load templates, current count is: " + str(self.fingerprint.getTemplateCount()))
@@ -80,12 +81,9 @@ class Fingerprint:
     
     # Get characteristics
     def get_characteristics(self):
-        print('Waiting for finger...')
-
         # Wait that finger is read
-        while (self.fingerprint.readImage() == False):
-            pass
-        print("shit")
+        if (self.fingerprint.readImage() == False):
+            return
 
         # Converts read image to characteristics and stores it in charbuffer 1
         self.fingerprint.convertImage(0x01)
@@ -98,6 +96,8 @@ class Fingerprint:
         
         # No match is found
         if (positionNumber == -1):
+            LED.asyncRed()
+            LCD.asyncWrite("Fingerprint not found")
             return None
         else:
             print('Found template at position #' + str(positionNumber))
@@ -110,7 +110,3 @@ class Fingerprint:
         template = self.fingerprint.downloadCharacteristics(0x01)
         # Return template as joined string
         return '|'.join(map(str,template))
-            
-        
-
- 
