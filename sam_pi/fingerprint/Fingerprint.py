@@ -29,24 +29,30 @@ class Fingerprint:
                 if characteristics != None:
                     # If course is not started try to start it
                     # otherwise try to record attendance
-                    if parser.course_id != None:
-                        course_information = parser.get_course("nfc", characteristics)
+                    if parser.course_id == None:
+                        course_information = parser.get_course("fingerprint", characteristics)
                         if course_information.error == None:
+                            if course_information.templates != None:
+                                self.load_templates(course_information.templates)
                             LED.asyncGreen()
                             LCD.asyncWrite("COURSE ID " + course_information.course_id + "                        INITIALIZED")
                         else:
+                            print(course_information.error)
                             LED.asyncRed()
                             LCD.write(course_information.error)
                     else:
-                        response = self.parser.record_attendance("fingerprint", characteristics)
+                        response = parser.record_attendance("fingerprint", characteristics)
                         if response.error == None:
                             LED.asyncGreen()
                             LCD.asyncWrite("Attendance recorded successfully for student with id " + response.student_id)
                         else:
                             LED.asyncRed()
+                            print(response.error)
                             LCD.asyncWrite("Error: " + response.error)
     
     def load_templates(self, templates):
+        self.loading_templates = True
+        time.sleep(2)
         print("Preparing to load templates, current count is: " + str(self.fingerprint.getTemplateCount()))
         # Before loading templates remove old ones
         self.fingerprint.clearDatabase()
@@ -54,15 +60,18 @@ class Fingerprint:
         
         normalized_templates = []
         # Transfer each template from string to array of ints
-        for template in course_information.templates:
+        for template in templates:
             normalized_templates.append(map(int, template.split("|")))
-
+        
         for template in normalized_templates:
             # Load template data to first buffer
             self.fingerprint.uploadCharacteristics(0x01, template)
             # By default code will find free space and store template from first buffer
             # to fingerprint
             self.fingerprint.storeTemplate()
+        time.sleep(2)
+        self.loading_templates = False
+        print(normalized_templates)
         print("Finished loading templates current count is: "+ str(self.fingerprint.getTemplateCount()))
     
     # Generate template for user
@@ -81,9 +90,11 @@ class Fingerprint:
     
     # Get characteristics
     def get_characteristics(self):
+        if self.loading_templates:
+            return None
         # Wait that finger is read
         if (self.fingerprint.readImage() == False):
-            return
+            return None
 
         # Converts read image to characteristics and stores it in charbuffer 1
         self.fingerprint.convertImage(0x01)

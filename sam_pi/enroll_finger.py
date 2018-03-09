@@ -20,6 +20,8 @@ while(True):
         nfc_data = str(uid[0]) + str(uid[1]) + str(uid[2]) + str(uid[3]) + str(uid[4])
         print("Card Detected")
         fingerprint = finerprint_scanner.get_template()
+        print(fingerprint)
+        
         print("Fingeprint data collected")
         result = parser.upload_fingerprint(nfc_data, fingerprint)
         if result.success:

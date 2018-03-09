@@ -13,10 +13,6 @@ message1 = " SWIPE CARD TO                          START PRACTICAL"
 message2 = "RECORD THE                              ATTANDANCE..."
 message3 = "CARD DETECTED"
 
-# Just for test purpose later change to better solution
-pi_id = 1
-
-
 def readNFC(parser, fingerprint):
 
     # Create an object of the class MFRC522
@@ -49,14 +45,14 @@ def readNFC(parser, fingerprint):
            
             # UID saved as nfcData
             nfc_data = str(uid[0]) + str(uid[1]) + str(uid[2]) + str(uid[3]) + str(uid[4])
-            
+            print(nfc_data)
             if parser.course_id == None:
                 course_information = parser.get_course("nfc", nfc_data)
                 if course_information.error == None:
                     LED.asyncGreen()
                     LCD.asyncWrite("COURSE ID " + course_information.course_id + "                        INITIALIZED")
-                    if courser_information.templates != None:
-                        fingerprint.load_templates(templates)
+                    if course_information.templates != None:
+                        fingerprint.load_templates(course_information.templates)
                     #print("Current course id " + course_information.course_id + " it ends at " + course_information.end_time + "\n")
                     #parser.end_time = course_information.end_time
                     # Todo add timeout on end time i.e change course id to none after certain time

@@ -2,17 +2,21 @@ import time
 
 class Poller:
     parser = None
-    pi_id = None
     fingerprint = None
+    pi_id = None
     
     # Todo pass fingeprint class as parameter as well
-    def __init__(self, parser, pi_id):
-        parser = parser
+    def __init__(self, parser, fingerprint, pi_id):
+        self.parser = parser
+        self.fingerprint = fingerprint
+        self.pi_id = pi_id
     
     def startPolling(self):
         while 1:
+            print("poll")
             self.pollPendingPracticals()
             self.pollCurrentTemplates()
+            time.sleep(10)
             
      
     def pollPendingPracticals(self):
@@ -22,7 +26,7 @@ class Poller:
                 print("There was an error:" + pending_practical.error)
             elif pending_practical.pending:
                 print("Practical for course: " + pending_practical.course_id + " started")
-        time.sleep(20)
+        time.sleep(10)
         
     def pollCurrentTemplates(self):
         if self.parser.course_id == None:
@@ -33,6 +37,6 @@ class Poller:
                 # when was the last time templates were loaded
                 # if templates were loaded recently do not call parser.current_templates method
                 # i.e add check to first if statement
-                print("templates received")
+                self.fingerprint.load_templates(upcoming_templates.templates)
         time.sleep(60)
         
