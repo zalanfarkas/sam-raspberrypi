@@ -50,8 +50,13 @@ class Fingerprint:
         # Before loading templates remove old ones
         self.fingerprint.clearDatabase()
         print("Deleted old templates, current count is: " + str(self.fingerprint.getTemplateCount()))
+        
+        normalized_templates = []
+        # Transfer each template from string to array of ints
+        for template in course_information.templates:
+            normalized_templates.append(map(int, template.split("|")))
 
-        for template in templates:
+        for template in normalized_templates:
             # Load template data to first buffer
             self.fingerprint.uploadCharacteristics(0x01, template)
             # By default code will find free space and store template from first buffer
