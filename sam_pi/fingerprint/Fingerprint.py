@@ -23,15 +23,26 @@ class Fingerprint:
             characteristics = self.get_characteristics()
             if characteristics == None:
                 LED.asyncRed()
-                LCD.asyncDisplay("Fingerprint not found")
+                LCD.asyncWrite("Fingerprint not found")
             else:
-                response = self.parser.record_attendance("fingerprint", characteristics)
-                if response.error == None:
-                    LED.asyncGreen()
-                    LCD.asyncDisplay("Attendance recorded successfully for student with id " + response.student_id)
+                # If course is not started try to start it
+                # otherwise try to record attendance
+                if parser.course_id != None:
+                    course_information = parser.get_course("nfc", characteristics)
+                    if course_information.error == None:
+                        LED.asyncGreen()
+                        LCD.asyncWrite("COURSE ID " + course_information.course_id + "                        INITIALIZED")
+                    else:
+                        LED.asyncRed()
+                        LCD.write(course_information.error)
                 else:
-                    LED.asyncRed()
-                    LCD.asyncDisplay("Error: " + response.error)
+                    response = self.parser.record_attendance("fingerprint", characteristics)
+                    if response.error == None:
+                        LED.asyncGreen()
+                        LCD.asyncWrite("Attendance recorded successfully for student with id " + response.student_id)
+                    else:
+                        LED.asyncRed()
+                        LCD.asyncWrite("Error: " + response.error)
     
     def load_templates(self, templates):
         print("Preparing to load templates, current count is: " + str(self.fingerprint.getTemplateCount()))
