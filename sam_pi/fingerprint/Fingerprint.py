@@ -19,7 +19,7 @@ class Fingerprint:
             exit(1)
             
     def start(self, parser):
-        while True:
+        while 1:
             # Sleep thread, otherwise pi will get overloaded
             time.sleep(1)
             # Only try to scan fingers, when sensor is not busy
@@ -35,24 +35,27 @@ class Fingerprint:
                             if course_information.templates != None:
                                 self.load_templates(course_information.templates)
                             LED.asyncGreen()
-                            LCD.asyncWrite("COURSE ID " + course_information.course_id + "                        INITIALIZED")
+                            LCD.passmessage("COURSE ID " + course_information.course_id + "                        INITIALIZED")
                         else:
                             print(course_information.error)
                             LED.asyncRed()
-                            LCD.write(course_information.error)
+                            LCD.passmessage(course_information.error)
                     else:
                         response = parser.record_attendance("fingerprint", characteristics)
                         if response.error == None:
                             LED.asyncGreen()
-                            LCD.asyncWrite("Attendance recorded successfully for student with id " + response.student_id)
+                            LCD.passmessage("ID " + response.student_id + "                             RECORDED")
                         else:
                             LED.asyncRed()
                             print(response.error)
-                            LCD.asyncWrite("Error: " + response.error)
+                            LCD.passmessage("ERROR:                                  " + response.error)
     
     def load_templates(self, templates):
         self.loading_templates = True
+        print("about to start load")
         time.sleep(2)
+        if(self.fingerprint.getTemplateCount() == None):
+            return
         print("Preparing to load templates, current count is: " + str(self.fingerprint.getTemplateCount()))
         # Before loading templates remove old ones
         self.fingerprint.clearDatabase()
@@ -99,7 +102,7 @@ class Fingerprint:
         # Converts read image to characteristics and stores it in charbuffer 1
         self.fingerprint.convertImage(0x01)
 
-        # Searchs template
+        # Search template
         result = self.fingerprint.searchTemplate()
 
         positionNumber = result[0]
@@ -108,7 +111,7 @@ class Fingerprint:
         # No match is found
         if (positionNumber == -1):
             LED.asyncRed()
-            LCD.asyncWrite("Fingerprint not found")
+            LCD.passmessage("FINGERPRINT                         NOT FOUND")
             return None
         else:
             print('Found template at position #' + str(positionNumber))

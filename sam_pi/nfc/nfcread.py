@@ -7,6 +7,7 @@ from threading import Thread
 import led.LED as LED
 import lcd.LCD as LCD
 import time
+import threading
 
 #_____________________________Messages_____________________________#
 message1 = " SWIPE CARD TO                          START PRACTICAL"
@@ -20,12 +21,12 @@ def readNFC(parser, fingerprint):
 
     # This loop keeps checking for chips. If one is near it will get the UID
     while True:
-
+        print(threading.active_count())
         # Message for recording attandance
         if parser.course_id == None:
-            LCD.asyncWrite(" SWIPE CARD TO                          START PRACTICAL")
+            LCD.passmessage(" SWIPE CARD TO                          START PRACTICAL")
         else:
-            LCD.asyncWrite("RECORD THE                              ATTANDANCE...")
+            LCD.passmessage("RECORD THE                              ATTANDANCE...")
         
         # Scan for cards
         (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
@@ -41,8 +42,8 @@ def readNFC(parser, fingerprint):
             #in_progress = True
             
             #LED.asyncGreen()
-            LCD.asyncWrite("CARD DETECTED")
-           
+            LCD.passmessage("CARD DETECTED")
+            print("CARD DETECTED")
             # UID saved as nfcData
             nfc_data = str(uid[0]) + str(uid[1]) + str(uid[2]) + str(uid[3]) + str(uid[4])
             print(nfc_data)
@@ -50,7 +51,7 @@ def readNFC(parser, fingerprint):
                 course_information = parser.get_course("nfc", nfc_data)
                 if course_information.error == None:
                     LED.asyncGreen()
-                    LCD.asyncWrite("COURSE ID " + course_information.course_id + "                        INITIALIZED")
+                    LCD.passmessage("COURSE ID " + course_information.course_id + "                        INITIALIZED")
                     if course_information.templates != None:
                         fingerprint.load_templates(course_information.templates)
                     #print("Current course id " + course_information.course_id + " it ends at " + course_information.end_time + "\n")
@@ -59,18 +60,19 @@ def readNFC(parser, fingerprint):
 
                 else:
                     LED.asyncRed()
-                    LCD.write(course_information.error)
+                    LCD.passmessage(course_information.error)
+                    print("eerrrr0")
                     #print(course_information.error + "\n")
 
             else:
                 attendance_information = parser.record_attendance("nfc", nfc_data)
                 if attendance_information.error == None:
                     LED.asyncGreen()
-                    LCD.asyncWrite(attendance_information.student_id)
+                    LCD.passmessage(attendance_information.student_id)
                     #print("Attendance recorded successfully for student with id: " + attendance_information.student_id + "\n")
 
                 else:
                     LED.asyncRed()
-                    LCD.asyncWrite(attendance_information.error)
+                    LCD.passmessage(attendance_information.error)
                     #print("Attendance wasn't recorded succesfully here is the error: " + attendance_information.error + "\n")
         time.sleep(1)       

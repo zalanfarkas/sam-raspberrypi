@@ -23,7 +23,6 @@ def init():
 
 def begin():
 	global _displayfunction
-	#, _numlines, _displacontrol, _displaymode
  
         _displayfunction |= 0x08
    
@@ -108,6 +107,7 @@ def send(value, mode):
   
 def pulseEnable():
 	GPIO.output(LCD_EN, 0)
+
 	time.sleep(0.000001)
 	GPIO.output(LCD_EN, 1)
 	time.sleep(0.000001)
@@ -121,16 +121,35 @@ def write4bits(value):
 			
 	pulseEnable()
 
-fuckoff = False
+cache = ""
+message = ""
+def start():
+        global cache, message
+        
+        while 1:
+                if message != cache:
+                        write(message)
+                        cache = message
+                time.sleep(0.5)
+
+def passmessage(newmessage):
+        global message
+        message = newmessage
+        
+
+        
 messagecopy = ""
 def asyncWrite(message):
         global messagecopy
         if messagecopy == message:
                 return
         else:
+                print("FUCK")
                 messagecopy = message
                 w = Thread(target=write, args=(message,))
                 w.start()
+
+                
 
 def displaymessage(message):
         clear()
@@ -145,13 +164,3 @@ def displaymessage(message):
                 time.sleep(0.2)
                 write(message)
         time.sleep(0.1)
-
-fuckme = None
-
-def asyncDisplay(message):
-        global fuckme
-        if fuckme != None:
-                fuckme._Thread__delete()
-        fuckme = Thread(target=displaymessage, args=(message,))
-        fuckme.start()
-        

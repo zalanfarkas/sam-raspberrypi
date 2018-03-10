@@ -10,6 +10,7 @@ import lcd.LCD as LCD
 import led.LED as LED
 import thread
 import time
+import threading
 
 def main():
    LCD.init()
@@ -18,18 +19,24 @@ def main():
    fingerprint = Fingerprint()
    poller = Poller(parser, fingerprint, 1)
    
+   
    try:
+      threading.Thread(target=LCD.start).start()
+      threading.Thread(target=nfcread.readNFC, args=(parser, fingerprint,)).start()
+      threading.Thread(target=poller.startPolling).start()
+      #thread.start_new_thread(LCD.start, ())
       #thread.start_new_thread(nfcread.pollPendingPracticals, (parser,))
-      thread.start_new_thread(nfcread.readNFC, (parser, fingerprint,))
-      thread.start_new_thread(poller.startPolling, ())
+      #thread.start_new_thread(nfcread.readNFC, (parser, fingerprint,))
+      #thread.start_new_thread(poller.startPolling, ())
    except:
       print "Error: unable to start thread"
-      
-   while True:
-       fingerprint.start(parser)
 
-   GPIO.cleanup()
+   #threading.Thread(target=fingerprint.start, args=(parser,)).start()
+   #print(threading.active_count())
+   fingerprint.start(parser)
 
+      #time.sleep(5)
+      #pass
 
 if __name__ == '__main__':
    main()
