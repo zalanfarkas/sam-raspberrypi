@@ -35,6 +35,7 @@ class Fingerprint:
                             if course_information.templates != None:
                                 self.load_templates(course_information.templates)
                             LED.asyncGreen()
+                            print("started course from finger")
                             LCD.passmessage("COURSE ID " + course_information.course_id + "                        INITIALIZED")
                         else:
                             print(course_information.error)
