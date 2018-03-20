@@ -1,5 +1,4 @@
 from pyfingerprint.pyfingerprint import PyFingerprint
-import lcd.LCD as LCD
 import led.LED as LED
 import time
 
@@ -7,6 +6,7 @@ class Fingerprint:
 
     fingerprint = None
     loading_templates = False
+    LCD_pipe = None
     
     def __init__(self):
         try:
@@ -18,10 +18,16 @@ class Fingerprint:
             print('Exception message: ' + str(e))
             exit(1)
             
-    def start(self, parser):
+    def start(self, parser, main_pipe, LCD_pipe):
+        self.LCD_pipe = LCD_pipe
         while 1:
-            # Sleep thread, otherwise pi will get overloaded
-            time.sleep(1)
+            # Check if there are any updates from parent process
+            if main_pipe.poll(1):
+                message_from_parent = main_pipe.recv()
+                if isinstance(message_from_parent, basestring):
+                    parser.course_id = message_from_parent
+                else:
+                    self.load_templates(message_from_parent)
             # Only try to scan fingers, when sensor is not busy
             if self.loading_templates == False:
                 # Try to get finger characteristics
@@ -36,20 +42,21 @@ class Fingerprint:
                                 self.load_templates(course_information.templates)
                             LED.asyncGreen()
                             print("started course from finger")
-                            LCD.passmessage("COURSE ID " + course_information.course_id + "                        INITIALIZED")
+                            LCD_pipe.send("COURSE ID " + course_information.course_id + "                        INITIALIZED")
+                            main_pipe.send(course_information.course_id)
                         else:
                             print(course_information.error)
                             LED.asyncRed()
-                            LCD.passmessage(course_information.error)
+                            LCD_pipe.send(course_information.error)
                     else:
                         response = parser.record_attendance("fingerprint", characteristics)
                         if response.error == None:
                             LED.asyncGreen()
-                            LCD.passmessage("ID " + response.student_id + "                             RECORDED")
+                            LCD_pipe.send("ID " + response.student_id + "                             RECORDED")
                         else:
                             LED.asyncRed()
                             print(response.error)
-                            LCD.passmessage("ERROR:                                  " + response.error)
+                            LCD_pipe.send("ERROR:                                  " + response.error)
     
     def load_templates(self, templates):
         self.loading_templates = True
@@ -112,7 +119,8 @@ class Fingerprint:
         # No match is found
         if (positionNumber == -1):
             LED.asyncRed()
-            LCD.passmessage("FINGERPRINT                         NOT FOUND")
+            print("Fingerprint not found")
+            self.LCD_pipe.send("FINGERPRINT                             NOT FOUND")
             return None
         else:
             print('Found template at position #' + str(positionNumber))

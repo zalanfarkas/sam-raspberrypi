@@ -1,14 +1,16 @@
 import time
+import led.LED as LED
+import lcd.LCD as LCD
 
 class Poller:
     parser = None
-    fingerprint = None
+    fingerprint_pipe = None
     pi_id = None
     
     # Todo pass fingeprint class as parameter as well
-    def __init__(self, parser, fingerprint, pi_id):
+    def __init__(self, parser, fingerprint_pipe, pi_id):
         self.parser = parser
-        self.fingerprint = fingerprint
+        self.fingerprint_pipe = fingerprint_pipe
         self.pi_id = pi_id
     
     def startPolling(self):
@@ -16,7 +18,6 @@ class Poller:
             print("poll")
             self.pollPendingPracticals()
             self.pollCurrentTemplates()
-            time.sleep(10)
             
      
     def pollPendingPracticals(self):
@@ -26,6 +27,10 @@ class Poller:
                 print("There was an error:" + pending_practical.error)
             elif pending_practical.pending:
                 print("Practical for course: " + pending_practical.course_id + " started")
+                LED.asyncGreen()
+                #LCD.passmessage("COURSE ID " + pending_practical.course_id + "                        INITIALIZED")
+                # Inform fingerprint about practical
+                fingerprint_pipe.send(pending_practical.course_id)
         time.sleep(10)
         
     def pollCurrentTemplates(self):
@@ -37,6 +42,6 @@ class Poller:
                 # when was the last time templates were loaded
                 # if templates were loaded recently do not call parser.current_templates method
                 # i.e add check to first if statement
-                self.fingerprint.load_templates(upcoming_templates.templates)
+                self.fingerprint_pipe.send(upcoming_templates.templates)
         time.sleep(60)
         

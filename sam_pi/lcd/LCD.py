@@ -128,15 +128,37 @@ def start():
         
         while 1:
                 if message != cache:
+                        print("Writting message" + message)
                         write(message)
                         cache = message
                 time.sleep(0.5)
 
-def passmessage(newmessage):
-        global message
-        message = newmessage
+cache = ""
+message = ""
+wait = False
+def new_start(LCD_pipe):
+        global cache
+        while 1:
+                if LCD_pipe.poll():
+                        newMessage = LCD_pipe.recv()
+                        if newMessage == cache:
+                                continue
+                        print("Writting message" + newMessage)
+                        cache = newMessage
+                        write(newMessage)
+                        time.sleep(1)
+
+def current_message():
+        global cache
+        return cache
         
 
+        
+
+#def passmessage(newmessage):
+#        global message
+#        message = newmessage
+        
         
 messagecopy = ""
 def asyncWrite(message):
@@ -144,7 +166,6 @@ def asyncWrite(message):
         if messagecopy == message:
                 return
         else:
-                print("FUCK")
                 messagecopy = message
                 w = Thread(target=write, args=(message,))
                 w.start()
