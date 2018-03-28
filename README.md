@@ -1,21 +1,59 @@
-A small class to interface with the NFC reader Module MFRC522 on the Raspberry Pi.
+# README
 
-This is a Python port of the example code for the NFC module MF522-AN.
+# SAM-RASPBERRYPI application 
 
-##Requirements This code requires you to have SPI-Py installed from the following repository: https://github.com/lthiery/SPI-Py
+part of the SAM (Student Attendance Monitoring) project of Team Foxtrot 2018 at University of Aberdeen
 
-##Examples This repository includes a couple of examples showing how to read, write, and dump data from a chip. They are thoroughly commented, and should be easy to understand.
-Pins
+Copyright (c) 2018 Team Foxtrot
 
-You can use this image for reference.
-Name 	Pin # 	Pin name
-SDA 	24 	GPIO8
-SCK 	23 	GPIO11
-MOSI 	19 	GPIO10
-MISO 	21 	GPIO9
-IRQ 	None 	None
-GND 	Any 	Any Ground
-RST 	22 	GPIO25
-3.3V 	1 	3V3
+Licensed under MIT License
 
-##Usage Import the class by importing MFRC522 in the top of your script. For more info see the examples.
+## Getting started
+
+* If you don’t have python preinstalled, install it by typing following command to command prompt:
+```
+sudo apt-get install python2.7-dev
+```
+* Install pip (python package manager)
+	- Go to pip.pypa.io install[2] page and follow install instructions
+* Enable SPI device
+	- Go to /etc/modprobe.d/raspi-blackist.conf and remove # from blacklist i2c-bcm2708 line
+* Download SPI-Py package by opening command prompt and entering:
+```
+git clone https://github.com/lthiery/SPI-Py
+```
+* Install SPI-Py package by typing following command to command prompt:
+```
+sudo apt-get-install python-dev
+```
+*  Install GPIO python package by entering following commands to command prompt:
+```
+wget https://pypi.python.org/packages/source/R/RPi.GPIO-0.5.4.tar.gz
+```
+```
+tar zxf RPi.GPIO-0.5.4.tar.gz
+```
+```
+cd RPi.GPIO-0.5.4
+```
+```
+sudo python setup.py install
+```
+* Install Request library
+* Add dependencies for fingerprint sensor
+```
+wget -O - http://apt.pm-codeworks.de/pm-codeworks.de.gpg | apt-key add -
+```
+```
+wget http://apt.pm-codeworks.de/pm-codeworks.list -P /etc/apt/sources.list.d/
+```
+ 
+* Install python fingerprint library
+	```
+	apt-get update
+	```
+	```
+	apt-get install python-fingerprint --yes
+	```
+
+ [2] https://pip.pypa.io/en/stable/installing/
