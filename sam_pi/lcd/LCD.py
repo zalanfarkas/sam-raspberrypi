@@ -134,18 +134,7 @@ def write4bits(value):
 
 	pulseEnable()
 
-cache = ""
-message = ""
-def start():
-        global cache, message
-
-        while 1:
-                if message != cache:
-                        print("Writting message" + message)
-                        write(message)
-                        cache = message
-                time.sleep(0.5)
-
+# LCD loop which check for new messages
 cache = ""
 message = ""
 wait = False
@@ -160,11 +149,6 @@ def new_start(LCD_pipe):
                         cache = newMessage
                         write(newMessage)
                         time.sleep(1)
-
-def current_message():
-        global cache
-        return cache
-
 
 # Creates new thread when message is being written
 messagecopy = ""
