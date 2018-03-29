@@ -1,3 +1,6 @@
+# Copyright (c) 2018 Team Foxtrot
+# Licensed under MIT License
+
 import RPi.GPIO as GPIO
 import time
 from threading import Thread
