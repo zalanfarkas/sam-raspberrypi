@@ -23,7 +23,7 @@ def readNFC(parser, fingerprint_pipe, LCD_pipe):
         if parser.course_id == None:
             LCD_pipe.send(" SWIPE CARD TO                          START PRACTICAL")
         else:
-            LCD_pipe.send("RECORD THE                              ATTANDANCE...")
+            LCD_pipe.send("RECORD THE                              ATTENDANCE...")
             
         # Scan for cards
         (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
@@ -56,17 +56,19 @@ def readNFC(parser, fingerprint_pipe, LCD_pipe):
                 else:
                     LED.asyncRed()
                     LCD_pipe.send(course_information.error)
-                    print("eerrrr0")
+                    print(course_information.error)
 
             else:
                 attendance_information = parser.record_attendance("nfc", nfc_data)
                 if attendance_information.error == None:
                     LED.asyncGreen()
-                    LCD_pipe.send(attendance_information.student_id)
+                    LCD_pipe.send("ID: " + attendance_information.student_id + "                             RECORDED")
+         
                     #print("Attendance recorded successfully for student with id: " + attendance_information.student_id + "\n")
                 else:
                     LED.asyncRed()
                     LCD_pipe.send(attendance_information.error)
+                    print("could record attendace")
                     #print("Attendance wasn't recorded succesfully here is the error: " + attendance_information.error + "\n")
 
         time.sleep(1)

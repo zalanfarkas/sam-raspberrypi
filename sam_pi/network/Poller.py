@@ -30,7 +30,7 @@ class Poller:
                 LED.asyncGreen()
                 #LCD.passmessage("COURSE ID " + pending_practical.course_id + "                        INITIALIZED")
                 # Inform fingerprint about practical
-                fingerprint_pipe.send(pending_practical.course_id)
+                self.fingerprint_pipe.send(pending_practical.course_id)
         time.sleep(10)
         
     def pollCurrentTemplates(self):

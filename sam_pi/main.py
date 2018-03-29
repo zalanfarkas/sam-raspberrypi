@@ -40,19 +40,6 @@ def main():
          poll_thread = threading.Thread(target=poller.startPolling)
          poll_thread.daeomon = True
          poll_thread.start()
-         #threading.Thread(target=LCD.new_start, args=(LCD_IN,)).start()
-         #threading.Thread(target=nfcread.readNFC, args=(parser, fingerpint_pipe, LCD_OUT,)).start()
-         #threading.Thread(target=poller.startPolling).start()
-
-
-         #thread.start_new_thread(LCD.new_start, (LCD_IN,))
-         #thread.start_new_thread(nfcread.readNFC, (parser, fingerpint_pipe, LCD_OUT,))
-         #thread.start_new_thread(poller.startPolling, ())
-
-         #thread.start_new_thread(LCD.start, ())
-         #thread.start_new_thread(nfcread.pollPendingPracticals, (parser,))
-         #thread.start_new_thread(nfcread.readNFC, (parser, fingerprint,))
-         #thread.start_new_thread(poller.startPolling, ())
       except:
          print "Error: unable to start thread"
       try:
@@ -60,6 +47,7 @@ def main():
             if fingerpint_pipe.poll(1):
                parser.course_id = fingerpint_pipe.recv()
       except KeyboardInterrupt:
+         LCD.clear()
          os.kill(pid, signal.SIGKILL)
          os.kill(os.getpid(), signal.SIGKILL)
          sys.exit()
@@ -67,11 +55,10 @@ def main():
          
    else:
       try:
-      #thread.start_new_thread(LCD.new_start, (LCD_IN,))
-      #threading.Thread(target=LCD.start).start()
          fingerprint = Fingerprint()
          fingerprint.start(parser, main_pipe, LCD_OUT)
       except KeyboardInterrupt:
+         LCD.clear()
          sys.exit()
 
 if __name__ == '__main__':
