@@ -1,3 +1,6 @@
+# Copyright (c) 2018 Team Foxtrot
+# Licensed under MIT License
+
 class API_URLS:
     BASE = "https://abdn-sam.herokuapp.com/api/"
     GET_COURSE_ID = BASE + "get_course"
