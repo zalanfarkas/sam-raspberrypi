@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
+# created by Mario Gómez
+# https://github.com/mxgxw
+
 import RPi.GPIO as GPIO
 import spi
 import signal
