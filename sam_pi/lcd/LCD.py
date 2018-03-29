@@ -1,3 +1,8 @@
+# Copyright (c) 2018 Team Foxtrot
+# Licensed under MIT License
+
+# Partly based on library created by LiquidCrystal Arduino
+
 from threading import Thread
 import RPi.GPIO as GPIO
 import time
@@ -7,10 +12,9 @@ _displayfunction = 0
 _displaycontrol = 0
 _row_offsets = [None]*4
 
-LCD_RS = 15 #3
-LCD_EN = 13 #5
-LCD_DATA = [11,7,5,3] #7,11,13,15
-
+LCD_RS = 15 # GPIO Pin #15
+LCD_EN = 13 # GPIO Pin #13
+LCD_DATA = [11,7,5,3] # GPIO Pin #11,7,5,3
 
 LCD_COLS = 16 # Sets the number of columns
 LCD_ROWS = 2 # Sets the number of rows
