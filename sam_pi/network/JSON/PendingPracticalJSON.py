@@ -1,3 +1,6 @@
+# Copyright (c) 2018 Team Foxtrot
+# Licensed under MIT License
+
 class PendingPracticalJSON:
     pending = False
     course_id = None
