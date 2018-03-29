@@ -36,7 +36,8 @@ class Poller:
                 self.fingerprint_pipe.send(pending_practical.course_id)
         # Wait 10 seconds
         time.sleep(10)
-        
+    
+    # Poll fingerprint templates from server
     def pollCurrentTemplates(self):
         # Only poll for fingerprint templates, if practical is not started
         if self.parser.course_id == None:
