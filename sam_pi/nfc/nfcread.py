@@ -7,14 +7,8 @@ from network.Parser import Parser
 from nfc.MFRC522 import MFRC522
 from threading import Thread
 import led.LED as LED
-#import lcd.LCD as LCD
 import time
 import threading
-
-#_____________________________Messages_____________________________#
-message1 = " SWIPE CARD TO                          START PRACTICAL"
-message2 = "RECORD THE                              ATTANDANCE..."
-#message3 = "CARD DETECTED"
 
 def readNFC(parser, fingerprint_pipe, LCD_pipe):
     # Create an object of the class MFRC522
