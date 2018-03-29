@@ -1,6 +1,11 @@
 # Copyright (c) 2018 Team Foxtrot
 # Licensed under MIT License
 
+# URL Scheme for API.
+
+# If setting up for first time, change base to your API 
+# layer location
+
 class API_URLS:
     BASE = "https://abdn-sam.herokuapp.com/api/"
     GET_COURSE_ID = BASE + "get_course"
