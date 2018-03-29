@@ -1,5 +1,6 @@
 #!/usr/bin/python
-
+# Copyright (c) 2018 Team Foxtrot
+# Licensed under MIT License
 
 from fingerprint.Fingerprint import Fingerprint
 from network.Parser import Parser
@@ -21,8 +22,10 @@ def main():
    main_pipe, fingerpint_pipe = Pipe()
    LCD_IN, LCD_OUT = Pipe()
    
+   # Initializes LCD and LED
    LCD.init()
    LED.init()
+   # Create an object of the class Parser and Poller
    parser = Parser()
    poller = Poller(parser, fingerpint_pipe, 1)
    # Create child process
@@ -31,6 +34,7 @@ def main():
    # Parent process
    if pid:
       try:
+         # start the individual threads for LCD, NFC and poller
          lcd_thread = threading.Thread(target=LCD.new_start, args=(LCD_IN,))
          lcd_thread.daeomon = True
          lcd_thread.start()
@@ -43,9 +47,11 @@ def main():
       except:
          print "Error: unable to start thread"
       try:
+         # start the unix pipe for fingerprint
          while 1:
             if fingerpint_pipe.poll(1):
                parser.course_id = fingerpint_pipe.recv()
+      # Kill the threads and clears the LCD screen
       except KeyboardInterrupt:
          LCD.clear()
          os.kill(pid, signal.SIGKILL)
@@ -54,12 +60,15 @@ def main():
          
          
    else:
+      # Restart the unix pipe for fingerprint
       try:
          fingerprint = Fingerprint()
          fingerprint.start(parser, main_pipe, LCD_OUT)
+      # Clear the screen
       except KeyboardInterrupt:
          LCD.clear()
          sys.exit()
 
+# run the main file
 if __name__ == '__main__':
    main()
