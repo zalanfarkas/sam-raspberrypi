@@ -1,3 +1,6 @@
+# Copyright (c) 2018 Team Foxtrot
+# Licensed under MIT License
+
 class RecordAttendanceJSON:
     student_id = None
     error = None
