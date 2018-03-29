@@ -1,3 +1,6 @@
+# Copyright (c) 2018 Team Foxtrot
+# Licensed under MIT License
+
 import nfc.MFRC522 as MFRC522
 from network.Parser import Parser
 from fingerprint.Fingerprint import Fingerprint
