@@ -47,7 +47,7 @@ def main():
       except:
          print "Error: unable to start thread"
       try:
-         # start the unix pipe for fingerprint
+         # Poll fingerprint pipe
          while 1:
             if fingerpint_pipe.poll(1):
                parser.course_id = fingerpint_pipe.recv()
@@ -60,7 +60,7 @@ def main():
          
          
    else:
-      # Restart the unix pipe for fingerprint
+      # Start fingerprint on child procces
       try:
          fingerprint = Fingerprint()
          fingerprint.start(parser, main_pipe, LCD_OUT)
