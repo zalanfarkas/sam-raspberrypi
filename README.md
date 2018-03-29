@@ -2,7 +2,7 @@
 
 # SAM-RASPBERRYPI application 
 
-part of the SAM (Student Attendance Monitoring) project of Team Foxtrot 2018 at University of Aberdeen
+Part of the SAM (Student Attendance Monitoring) project of Team Foxtrot 2018 at University of Aberdeen
 
 Copyright (c) 2018 Team Foxtrot
 
