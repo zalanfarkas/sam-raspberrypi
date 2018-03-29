@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
+# Copyright (c) 2018 Team Foxtrot
+# Licensed under MIT License
 
 from network.Parser import Parser
 from nfc.MFRC522 import MFRC522
@@ -38,14 +40,13 @@ def readNFC(parser, fingerprint_pipe, LCD_pipe):
         if status == MIFAREReader.MI_OK:
             #in_progress = True
             
-            #LED.asyncGreen()
-            
             print("CARD DETECTED")
             # UID saved as nfcData
             nfc_data = str(uid[0]) + str(uid[1]) + str(uid[2]) + str(uid[3]) + str(uid[4])
             print(nfc_data)
             if parser.course_id == None:
                 course_information = parser.get_course("nfc", nfc_data)
+                # If no error has occured, turn on Green LED and write on LCD
                 if course_information.error == None:
                     fingerprint_pipe.send(course_information.course_id)
                     LED.asyncGreen()
@@ -53,6 +54,7 @@ def readNFC(parser, fingerprint_pipe, LCD_pipe):
                     LCD_pipe.send("COURSE ID " + course_information.course_id + "                        INITIALIZED")
                     if course_information.templates != None:
                         fingerprint_pipe.send(course_information.templates)
+                # turn on Red LED and writte error message on LCD
                 else:
                     LED.asyncRed()
                     LCD_pipe.send(course_information.error)
@@ -60,15 +62,15 @@ def readNFC(parser, fingerprint_pipe, LCD_pipe):
 
             else:
                 attendance_information = parser.record_attendance("nfc", nfc_data)
+                # If no error has occured, turn on Green LED and write on LCD
                 if attendance_information.error == None:
                     LED.asyncGreen()
                     LCD_pipe.send("ID: " + attendance_information.student_id + "                             RECORDED")
-         
-                    #print("Attendance recorded successfully for student with id: " + attendance_information.student_id + "\n")
+                # turn on Red LED and write error message on LCD
                 else:
                     LED.asyncRed()
                     LCD_pipe.send(attendance_information.error)
                     print("could record attendace")
-                    #print("Attendance wasn't recorded succesfully here is the error: " + attendance_information.error + "\n")
-
+                    
+        # sleep for 1 second before reading the card again
         time.sleep(1)
