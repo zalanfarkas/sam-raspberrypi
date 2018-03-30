@@ -23,16 +23,16 @@ LCD_ROWS = 2 # Sets the number of rows
 def init():
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BOARD)
-	GPIO.setup(LCD_RS, GPIO.OUT)
-	GPIO.setup(LCD_EN, GPIO.OUT)
+    GPIO.setup(LCD_RS, GPIO.OUT)
+    GPIO.setup(LCD_EN, GPIO.OUT)
 
-	begin()
+    begin()
 
 # Initializes the LCD
 def begin():
 	global _displayfunction
 
-    _displayfunction |= 0x08
+        _displayfunction |= 0x08
 
 	setRowOffsets(0x00, 0x40, 0x00 + LCD_COLS, 0x40 + LCD_COLS)
 
